@@ -3,9 +3,10 @@ import { ProductList } from "../../components/product-list";
 import { useProducts } from "../../queries/queries";
 
 export const ProductContainer = () => {
-  const { data: products = [] } = useProducts();
-
-  console.log(products);
+  const { data: products = [] } = useProducts({
+    sortBy: "price",
+    order: "asc",
+  });
 
   return (
     <>
