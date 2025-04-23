@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import { Header } from "./components/header";
 import { ProductContainer } from "./modules/products";
-import { LoginContainer } from "./modules/login";
 import { jwtDecode } from "jwt-decode";
 import { JSX } from "react";
+import { LoginContainer } from "./modules/login/containers/login";
 
 interface JwtPayload {
   exp: number;
