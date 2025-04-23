@@ -1,6 +1,6 @@
 import { Button } from "../../../../components/ui/button"
 import { Card, CardContent, CardFooter } from "../../../../components/ui/card"
-import { Product } from "../../types"
+import { Product } from "../models"
 
 interface ProductCardProps {
   product: Product

@@ -1,9 +1,10 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Header } from "./components/header";
-import { ProductContainer } from "./modules/products";
 import { jwtDecode } from "jwt-decode";
 import { JSX } from "react";
-import { LoginContainer } from "./modules/login/containers/login";
+import { LoginContainer } from "./modules/Login/containers/login";
+import { ProductContainer } from "./modules/Products/containers/ProductContainer";
+import { useLocalStorage } from "./providers/local-storage";
 
 interface JwtPayload {
   exp: number;
@@ -20,37 +21,29 @@ const isValid = (token: string): boolean => {
 };
 
 const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
-  const token = localStorage.getItem("authToken");
+  const { get } = useLocalStorage();
+  const token = get("token");
 
-  // if (!token || !isValid(token)) {
-  //   localStorage.removeItem("authToken");
-  //   return <Navigate to="/login" replace />;
-  // }
+  if (!token || !isValid(token)) {
+    localStorage.removeItem("token");
+    return <Navigate to="/login" replace />;
+  }
 
   return element;
 };
 
 const routes = [
-  { path: "/", element: <ProtectedRoute element={< ProductContainer />} /> },
+  { path: "/", element: <ProtectedRoute element={<ProductContainer />} /> },
   { path: "/login", element: <LoginContainer /> },
 ];
 
-const AppContent = ({ isLoginPage }: { isLoginPage: boolean }) => {
-  if (isLoginPage) {
-    return (
-      <div className="flex-1">
-        <Routes>
-          {routes.map((route, index) => (
-            <Route key={index} path={route.path} element={route.element} />
-          ))}
-        </Routes>
-      </div>
-    );
-  }
+const AppContent = () => {
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/login";
 
   return (
     <div className="h-screen flex flex-col max-w-7xl p-6">
-      <Header />
+      {!isLoginPage && <Header />}
       <div className="flex-1">
         <Routes>
           {routes.map((route, index) => (
@@ -63,8 +56,5 @@ const AppContent = ({ isLoginPage }: { isLoginPage: boolean }) => {
 };
 
 export function App() {
-  const isLoginPage = location.pathname === '/login';
-
-  return <AppContent isLoginPage={isLoginPage} />
-
+  return <AppContent />;
 }
