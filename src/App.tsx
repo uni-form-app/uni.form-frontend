@@ -41,10 +41,22 @@ const AppContent = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
 
+  if (isLoginPage) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <Routes>
+          {routes.map((route, index) => (
+            <Route key={index} path={route.path} element={route.element} />
+          ))}
+        </Routes>
+      </div>
+    );
+  }
+
   return (
-    <div className="h-screen flex flex-col max-w-7xl p-6">
-      {!isLoginPage && <Header />}
-      <div className="flex-1">
+    <div className="h-screen w-full flex flex-col p-6">
+      <Header />
+      <div className="flex-1 w-full max-w-7xl">
         <Routes>
           {routes.map((route, index) => (
             <Route key={index} path={route.path} element={route.element} />
