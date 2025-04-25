@@ -6,7 +6,7 @@ import { Partner } from "..";
 //   return useQuery(["partners", params], () => getPartners(params));
 // };
 
-export const usePartners = (params: { lat: number; lng: number; radius: number; search?: string }) => {
+export const usePartners = (params: { lat?: number; lng?: number; radius?: number; search?: string }) => {
   return useQuery<Partner[], Error>({
     queryKey: ["partners", params],
     queryFn: () => getPartners(params),

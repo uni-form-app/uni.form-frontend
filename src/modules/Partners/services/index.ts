@@ -2,9 +2,9 @@ import { Partner } from "..";
 import { api } from "../../../integrations/api";
 
 export const getPartners = async (args: {
-  lat: number;
-  lng: number;
-  radius: number;
+  lat?: number;
+  lng?: number;
+  radius?: number;
   search?: string;
 }): Promise<Partner[]> => {
   const { lat, lng, radius, search } = args;

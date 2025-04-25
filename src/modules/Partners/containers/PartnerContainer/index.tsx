@@ -16,8 +16,8 @@ export const PartnerContainer = () => {
   const radius = 100; // TODO: pegar dinamicamente
 
   const { data: partners = [], isLoading } = usePartners({
-    lat: location?.latitude || 0,
-    lng: location?.longitude || 0,
+    lat: location?.latitude,
+    lng: location?.longitude,
     radius,
   });
 
