@@ -3,7 +3,7 @@ import { Input } from "../ui/input";
 
 export const Header = () => {
   return (
-    <header className="flex items-center justify-between">
+    <header className="flex items-center justify-between max-w-7x">
       <div className="flex items-center gap-4">
         <h1 className="text-xl font-bold">
           uni.<span className="font-normal">form</span>
