@@ -1,4 +1,4 @@
-import { CircleUser } from "lucide-react";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Input } from "../ui/input";
 
 export const Header = () => {
@@ -17,7 +17,9 @@ export const Header = () => {
       </div>
 
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <CircleUser size={24} />
+        <Avatar>
+          <AvatarFallback>JN</AvatarFallback>
+        </Avatar>
       </div>
     </header>
   );
