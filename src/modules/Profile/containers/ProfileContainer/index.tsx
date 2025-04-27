@@ -5,8 +5,6 @@ import { ProductList } from '../../../Products/components/product-list';
 export const ProfileContainer = () => {
   const { username } = useParams<{ username: string }>();
 
-  console.log(username);
-
   return (
     <>
       <div className="flex items-center justify-between mt-8">
