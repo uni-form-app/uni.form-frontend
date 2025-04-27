@@ -18,8 +18,12 @@ export const PartnerList = (props: PartnerContainerProps) => {
         {data.map((partner) => (
           <li key={partner.id} className="border p-4 rounded shadow">
             <h2 className="text-lg font-semibold">{partner.name}</h2>
-            <p>{partner.address}</p>
-            <p>{partner.city}</p>
+            <p>{partner.address}, {partner.city}</p>
+            {partner.distance && (
+              <p className="text-sm text-gray-500">
+                {partner.distance.toFixed(2)} km
+              </p>
+            )}
           </li>
         ))}
       </ul>

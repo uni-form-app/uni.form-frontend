@@ -17,6 +17,7 @@ export interface Partner {
   address: string;
   latitude: number;
   longitude: number;
+  distance: number | undefined;
 }
 
 export const PartnerContainer = () => {
