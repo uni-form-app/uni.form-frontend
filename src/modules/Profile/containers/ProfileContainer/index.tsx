@@ -3,6 +3,7 @@ import { ProductList } from '../../../Products/components/product-list';
 import { Modal } from '../../../../components/modal';
 import { useForm } from 'react-hook-form';
 import { Form } from '../../components/form';
+import { useCreateProduct } from '../../queries/queries';
 
 type Inputs = {
   name: string;
@@ -21,13 +22,9 @@ export const ProfileContainer = () => {
     handleSubmit,
   } = useForm<Inputs>()
 
+  const { mutate: create } = useCreateProduct()
+
   const onSubmit = (data: Inputs) => {
-    console.log(data);
-
-    // Para ver os arquivos:
-    console.log(data.image);
-
-    // Exemplo de enviar como FormData:
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('description', data.description);
@@ -35,14 +32,12 @@ export const ProfileContainer = () => {
     formData.append('school', data.school);
     formData.append('price', String(data.price));
 
-    // Para múltiplos arquivos:
     Array.from(data.image).forEach((file) => {
-      formData.append('images', file);
+      formData.append('image', file);
     });
 
-    // Agora você pode enviar `formData` com fetch, axios, etc.
+    create(formData)
   }
-
 
   return (
     <>
