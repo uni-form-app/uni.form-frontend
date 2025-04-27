@@ -14,7 +14,6 @@ export const PartnerList = (props: PartnerContainerProps) => {
 
   return (
     <div className="w-full">
-      <h1 className="text-xl font-bold mb-4">Parceiros Próximos</h1>
       <ul className="space-y-4">
         {data.map((partner) => (
           <li key={partner.id} className="border p-4 rounded shadow">
