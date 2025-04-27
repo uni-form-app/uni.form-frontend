@@ -1,3 +1,8 @@
+export type ProductImage = {
+  id: string;
+  path: string;
+}
+
 export type Product = {
   id: string;
   name: string;
@@ -9,5 +14,5 @@ export type Product = {
   status: 'AVAILABLE' | 'UNAVAILABLE' | string;
   createdAt: string;
   sellerId: string;
-  ProductImages: any[];
+  ProductImages: ProductImage[];
 }

@@ -11,7 +11,11 @@ export function ProductCard({ product }: ProductCardProps) {
     <Card className="rounded-sm max-w-[300px]">
       <CardContent>
         <div className="h-48 bg-gray-100 rounded flex items-center justify-center">
-          <span className="text-gray-400 text-sm italic">Sem imagem</span>
+          <img
+            src={`http://localhost:8080/public/${product.ProductImages[0].path}`}
+            alt={product.name}
+            className="object-cover w-full h-full rounded"
+          />
         </div>
 
         <div className="flex flex-row justify-between items-center gap-1 mt-4">
