@@ -8,6 +8,7 @@ type Inputs = {
   size: string;
   school: string;
   price: number;
+  image: FileList;
 }
 
 type FormProps = {
@@ -24,6 +25,13 @@ export const Form = ({ register, handleSubmit, onSubmit }: FormProps) => {
       <Input {...register("size")} placeholder="Tamanho" className="border p-2" />
       <Input {...register("school")} placeholder="Escola" className="border p-2" />
       <Input {...register("price")} type="number" placeholder="Preço" className="border p-2" />
+      <Input
+        {...register("image")}
+        type="file"
+        accept="image/*"
+        multiple
+        className="border p-2"
+      />
       <Button type="submit">Criar Anúncio</Button>
     </form>
   );
