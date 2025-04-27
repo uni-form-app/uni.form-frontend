@@ -6,6 +6,7 @@ import { LoginContainer } from "./modules/Login/containers/login";
 import { ProductContainer } from "./modules/Products/containers/ProductContainer";
 import { useLocalStorage } from "./providers/local-storage";
 import { PartnerContainer } from "./modules/Partners/containers/PartnerContainer";
+import { ProfileContainer } from "./modules/Profile/containers/ProfileContainer";
 
 interface JwtPayload {
   exp: number;
@@ -36,7 +37,8 @@ const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
 const routes = [
   { path: "/", element: <ProtectedRoute element={<ProductContainer />} /> },
   { path: "/login", element: <LoginContainer /> },
-  { path: "/partners", element: <PartnerContainer /> }
+  { path: "/partners", element: <PartnerContainer /> },
+  { path: "/:username", element: <ProtectedRoute element={<ProfileContainer />} /> },
 ];
 
 const AppContent = () => {
