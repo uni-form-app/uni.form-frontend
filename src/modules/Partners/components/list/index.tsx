@@ -1,4 +1,4 @@
-import { Partner } from "../..";
+import { Partner } from "../../containers/PartnerContainer";
 
 interface PartnerContainerProps {
   data: Partner[];
