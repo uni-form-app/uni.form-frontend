@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom"
-import { Button } from "../../../../components/ui/button"
 import { Card, CardContent, CardFooter } from "../../../../components/ui/card"
 import { Product } from "../models"
 
@@ -10,7 +9,7 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const imageUrl = "http://localhost:8080/public/" + product.ProductImages[0].path
   return (
-    <Link to={`/produtos/${product.id}`} key={product.id}>
+    <Link to={`/product/${product.id}`} key={product.id}>
       <Card className="h-full overflow-hidden hover:shadow-md transition-shadow pt-0 rounded-sm">
         <div className="aspect-square relative">
           <img src={imageUrl} alt={product.name} className="object-cover" />
@@ -21,9 +20,6 @@ export function ProductCard({ product }: ProductCardProps) {
         </CardContent>
         <CardFooter className="pt-0 flex justify-between items-center">
           <span className="font-bold text-lg">R$ {product.price}</span>
-          <Button variant="secondary" size="sm">
-            Ver detalhes
-          </Button>
         </CardFooter>
       </Card>
     </Link>
