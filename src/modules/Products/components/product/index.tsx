@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { Button } from "../../../../components/ui/button"
 import { Card, CardContent, CardFooter } from "../../../../components/ui/card"
 import { Product } from "../models"
@@ -7,30 +8,28 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const imageUrl = "http://localhost:8080/public/" + product.ProductImages[0].path
   return (
-    <Card className="rounded-sm max-w-[300px]">
-      <CardContent>
-        <div className="h-48 bg-gray-100 rounded flex items-center justify-center">
-          <img
-            src={`http://localhost:8080/public/${product.ProductImages[0].path}`}
-            alt={product.name}
-            className="object-cover w-full h-full rounded"
-          />
+    <Link to={`/produtos/${product.id}`} key={product.id}>
+      <Card className="h-full overflow-hidden hover:shadow-md transition-shadow pt-0">
+        <div className="aspect-square relative">
+          <img src={imageUrl} alt={product.name} className="object-cover" />
         </div>
+        <CardContent className="p-4">
+          {/* <Badge variant="outline" className="mb-2">
+                      {product.categoria}
+                    </Badge> */}
+          <h3 className="font-medium text-lg line-clamp-1">{product.name}</h3>
+          <p className="text-muted-foreground text-sm line-clamp-2 mt-1">{product.description}</p>
+        </CardContent>
+        <CardFooter className="p-4 pt-0 flex justify-between items-center">
+          <span className="font-bold text-lg">R$ {product.price}</span>
+          <Button variant="secondary" size="sm">
+            Ver detalhes
+          </Button>
+        </CardFooter>
+      </Card>
+    </Link>
 
-        <div className="flex flex-row justify-between items-center gap-1 mt-4">
-          <h2 className="text-md font-semibold text-gray-900">
-            {product.name}
-          </h2>
-          <p className="text-sm font-light">{product.price}</p>
-        </div>
-      </CardContent>
-
-      <CardFooter className="flex items-center gap-1">
-        <Button variant="outline" className="w-full">
-          Ver mais
-        </Button>
-      </CardFooter>
-    </Card>
   )
 }

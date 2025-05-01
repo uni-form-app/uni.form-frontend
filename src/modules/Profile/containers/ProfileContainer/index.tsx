@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { ProductList } from '../../../Products/components/product-list';
 import { Modal } from '../../../../components/modal';
 import { useForm } from 'react-hook-form';
 import { Form } from '../../components/form';
@@ -56,7 +55,7 @@ export const ProfileContainer = () => {
           />
         </Modal>
       </div>
-      <ProductList products={[]} />
+      {/* <ProductList products={[]} /> */}
     </>
   );
 }
