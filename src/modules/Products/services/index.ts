@@ -18,3 +18,8 @@ export const products = async (args: {
 
   return response.data;
 };
+
+export const product = async (id: string): Promise<Product> => {
+  const response = await api.get<Product>(`/products/${id}`);
+  return response.data;
+};

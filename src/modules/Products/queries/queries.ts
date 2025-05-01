@@ -14,3 +14,10 @@ export const useProducts = (params: Params) => {
     queryFn: () => service.products(params),
   });
 }
+
+export const useProduct = (id: string) => {
+  return useQuery<Product, Error>({
+    queryKey: ['product', id],
+    queryFn: () => service.product(id),
+  });
+}
