@@ -16,7 +16,7 @@ export const LoginContainer = () => {
     formState: { errors },
   } = useForm<LoginData>();
 
-  const { mutate: login } = useLogin();
+  const { mutate: login, isPending } = useLogin();
   const { store } = useLocalStorage()
   const navigate = useNavigate();
 
@@ -37,6 +37,7 @@ export const LoginContainer = () => {
       register={register}
       errors={errors}
       onSubmit={handleSubmit(onSubmit)}
+      isPending={isPending}
     />
   );
 };

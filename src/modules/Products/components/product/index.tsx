@@ -16,9 +16,6 @@ export function ProductCard({ product }: ProductCardProps) {
           <img src={imageUrl} alt={product.name} className="object-cover" />
         </div>
         <CardContent>
-          {/* <Badge variant="outline" className="mb-2">
-                      {product.categoria}
-                    </Badge> */}
           <h3 className="font-medium text-lg line-clamp-1">{product.name}</h3>
           <p className="text-muted-foreground text-sm line-clamp-2 mt-1">{product.description}</p>
         </CardContent>
