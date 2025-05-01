@@ -62,7 +62,7 @@ const AppContent = () => {
   return (
     <div className="h-screen w-full flex flex-col">
       <Header />
-      <div className="flex-1 w-full max-w-7x">
+      <div className="flex-1 w-full max-w-7x container mx-auto">
         <Routes>
           {routes.map((route, index) => (
             <Route key={index} path={route.path} element={route.element} />
