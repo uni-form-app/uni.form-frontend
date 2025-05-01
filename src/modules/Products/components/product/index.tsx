@@ -11,18 +11,18 @@ export function ProductCard({ product }: ProductCardProps) {
   const imageUrl = "http://localhost:8080/public/" + product.ProductImages[0].path
   return (
     <Link to={`/produtos/${product.id}`} key={product.id}>
-      <Card className="h-full overflow-hidden hover:shadow-md transition-shadow pt-0">
+      <Card className="h-full overflow-hidden hover:shadow-md transition-shadow pt-0 rounded-sm">
         <div className="aspect-square relative">
           <img src={imageUrl} alt={product.name} className="object-cover" />
         </div>
-        <CardContent className="p-4">
+        <CardContent>
           {/* <Badge variant="outline" className="mb-2">
                       {product.categoria}
                     </Badge> */}
           <h3 className="font-medium text-lg line-clamp-1">{product.name}</h3>
           <p className="text-muted-foreground text-sm line-clamp-2 mt-1">{product.description}</p>
         </CardContent>
-        <CardFooter className="p-4 pt-0 flex justify-between items-center">
+        <CardFooter className="pt-0 flex justify-between items-center">
           <span className="font-bold text-lg">R$ {product.price}</span>
           <Button variant="secondary" size="sm">
             Ver detalhes
