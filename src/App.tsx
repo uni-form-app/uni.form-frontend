@@ -60,7 +60,7 @@ const AppContent = () => {
   }
 
   return (
-    <div className="h-screen w-full flex flex-col p-6">
+    <div className="h-screen w-full flex flex-col">
       <Header />
       <div className="flex-1 w-full max-w-7x">
         <Routes>
