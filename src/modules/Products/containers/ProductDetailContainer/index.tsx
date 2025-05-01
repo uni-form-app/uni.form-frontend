@@ -3,21 +3,27 @@ import { Separator } from "../../../../components/ui/separator"
 import { useParams } from "react-router-dom"
 import { useProduct } from "../../queries/queries"
 import { Button } from "../../../../components/ui/button"
+import { useCart } from '../../../../hooks/useCart'
 
 export const ProductDetailContainer = () => {
-  const { id } = useParams()
+  const { id } = useParams();
+  const { addToCart } = useCart();
 
   if (!id) {
-    return <div>Produto não encontrado</div>
+    return <div>Produto não encontrado</div>;
   }
 
-  const { data: product } = useProduct(id)
+  const { data: product } = useProduct(id);
 
   if (!product) {
-    return <div>Produto não encontrado</div>
+    return <div>Produto não encontrado</div>;
   }
 
-  const imageUrl = "http://localhost:8080/public/" + product.ProductImages[0].path
+  const imageUrl = "http://localhost:8080/public/" + product.ProductImages[0].path;
+
+  const handleAddToCart = () => {
+    addToCart(product);
+  };
 
   return (
     <div className="container py-8">
@@ -69,12 +75,12 @@ export const ProductDetailContainer = () => {
           </div>
           <Separator />
           <div>
-            <Button className="w-full" variant="default">
+            <Button className="w-full" variant="default" onClick={handleAddToCart}>
               Adicionar ao carrinho
             </Button>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
