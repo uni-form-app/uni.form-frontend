@@ -2,6 +2,7 @@ import { Calendar, User } from "lucide-react"
 import { Separator } from "../../../../components/ui/separator"
 import { useParams } from "react-router-dom"
 import { useProduct } from "../../queries/queries"
+import { Button } from "../../../../components/ui/button"
 
 export const ProductDetailContainer = () => {
   const { id } = useParams()
@@ -65,6 +66,12 @@ export const ProductDetailContainer = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <Separator />
+          <div>
+            <Button className="w-full" variant="default">
+              Adicionar ao carrinho
+            </Button>
           </div>
         </div>
       </div>
