@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Link } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import { useAuth } from "../../providers/authProvider";
 
 export const Header = () => {
   const pathname = window.location.pathname;
@@ -13,6 +14,10 @@ export const Header = () => {
     { name: "Meus Pedidos", href: "/purchases", icon: Package },
     { name: "Anunciar", href: "/produtos/novo", icon: Plus },
   ]
+
+  const { user, logout } = useAuth();
+
+  console.log(user)
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">    <div className="container mx-auto flex h-16 items-center justify-between">
@@ -74,7 +79,9 @@ export const Header = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
               <Avatar className="h-8 w-8">
-                <AvatarFallback>US</AvatarFallback>
+                <AvatarFallback>
+                  {user?.username.slice(0, 2).toUpperCase() || "UU"}
+                </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
@@ -92,15 +99,12 @@ export const Header = () => {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer flex items-center" onClick={() => { }}>
+            <DropdownMenuItem className="cursor-pointer flex items-center" onClick={() => logout()}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Sair</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        {/* <Button asChild variant="default" size="sm">
-          <Link to="/login">Entrar</Link>
-        </Button> */}
       </div>
     </div>
 

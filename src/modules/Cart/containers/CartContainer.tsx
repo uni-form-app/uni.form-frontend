@@ -115,7 +115,6 @@ export const CartContainer = () => {
               </CardContent>
             </Card>
 
-            {/* Ponto de retirada */}
             <Card className="mt-6">
               <CardContent className="p-6">
                 <h2 className="text-lg font-medium mb-4">Ponto de retirada</h2>

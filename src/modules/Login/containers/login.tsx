@@ -17,7 +17,7 @@ export const LoginContainer = () => {
   } = useForm<LoginData>();
 
   const { mutate: login, isPending } = useLogin();
-  const { store } = useLocalStorage()
+  const { store } = useLocalStorage();
   const navigate = useNavigate();
 
   const onSubmit = (params: LoginData) => {
@@ -25,11 +25,11 @@ export const LoginContainer = () => {
       { ...params },
       {
         onSuccess: (response: { token: string }) => {
-          store("token", response.token);
-          navigate("/");
+          store('token', response.token);
+          navigate('/');
         },
       },
-    )
+    );
   };
 
   return (
