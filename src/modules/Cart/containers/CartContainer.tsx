@@ -152,16 +152,16 @@ export const CartContainer = () => {
                 <h2 className="text-lg font-medium mb-4">Resumo do pedido</h2>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>R$ {subtotal}</span>
+                  <span>R$ {subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Taxa de serviço (5%)</span>
-                  <span>R$ {serviceTax}</span>
+                  <span>R$ {serviceTax.toFixed(2)}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between font-bold">
                   <span>Total</span>
-                  <span>R$ {total}</span>
+                  <span>R$ {total.toFixed(2)}</span>
                 </div>
                 <div className="bg-muted p-3 rounded-md text-sm flex items-start gap-2">
                   <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />

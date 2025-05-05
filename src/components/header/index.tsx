@@ -68,7 +68,7 @@ export const Header = () => {
       </div>
 
       <div className="flex items-center gap-2">
-        <Link to="/carrinho">
+        <Link to="/cart">
           <Button variant="ghost" size="icon">
             <ShoppingBag className="h-5 w-5" />
             <span className="sr-only">Carrinho</span>
