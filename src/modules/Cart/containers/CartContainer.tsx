@@ -145,7 +145,6 @@ export const CartContainer = () => {
             </Card>
           </div>
 
-          {/* Resumo do pedido */}
           <div>
             <Card className="sticky top-20">
               <CardContent className="p-6 space-y-4">
