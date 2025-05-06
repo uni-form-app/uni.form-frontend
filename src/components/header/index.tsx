@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { useAuth } from "../../providers/authProvider";
+import { useCart } from "../../hooks/useCart";
 
 export const Header = () => {
   const pathname = window.location.pathname;
@@ -16,8 +17,7 @@ export const Header = () => {
   ]
 
   const { user, logout } = useAuth();
-
-  console.log(user)
+  const { total } = useCart()
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">    <div className="container mx-auto flex h-16 items-center justify-between">
@@ -68,12 +68,20 @@ export const Header = () => {
       </div>
 
       <div className="flex items-center gap-2">
-        <Link to="/cart">
-          <Button variant="ghost" size="icon">
-            <ShoppingBag className="h-5 w-5" />
-            <span className="sr-only">Carrinho</span>
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2 relative">
+          <Link to="/cart">
+            <Button variant="ghost" size="icon">
+              <ShoppingBag className="h-5 w-5" />
+              <span className="sr-only">Carrinho</span>
+            </Button>
+            {total > 0 && (
+              <span className="absolute top-0 right-0 inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                {total}
+              </span>
+            )}
+          </Link>
+        </div>
+
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

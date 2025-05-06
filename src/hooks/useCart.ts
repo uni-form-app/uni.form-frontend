@@ -6,13 +6,11 @@ const CART_KEY = 'cart';
 export const useCart = () => {
   const [cart, setCart] = useState<Product[]>([]);
 
-  // Função para salvar o carrinho no localStorage
   const saveCart = (items: Product[]) => {
     setCart(items);
     localStorage.setItem(CART_KEY, JSON.stringify(items));
   };
 
-  // Efeito para carregar o carrinho do localStorage ao iniciar
   useEffect(() => {
     const storedCart = localStorage.getItem(CART_KEY);
     if (storedCart) {
@@ -23,7 +21,6 @@ export const useCart = () => {
     }
   }, []);
 
-  // Adiciona um item ao carrinho, tratando duplicação
   const addToCart = (product: Product) => {
     const existingItemIndex = cart.findIndex((item) => item.id === product.id);
 
@@ -37,11 +34,12 @@ export const useCart = () => {
     }
   };
 
-  // Remove um item do carrinho
   const removeFromCart = (productId: string) => {
     const updatedCart = cart.filter((item) => item.id !== productId);
     saveCart(updatedCart);
   };
 
-  return { cart, addToCart, removeFromCart };
+  const total = cart.length
+
+  return { cart, addToCart, removeFromCart, total };
 };

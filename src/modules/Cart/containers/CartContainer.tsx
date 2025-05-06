@@ -68,7 +68,6 @@ export const CartContainer = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Lista de itens */}
           <div className="lg:col-span-2">
             <Card>
               <CardContent className="p-6">
