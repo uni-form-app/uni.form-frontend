@@ -1,13 +1,11 @@
 import React from "react";
-import { Calendar, User } from "lucide-react";
+import { User } from "lucide-react";
 
 interface SellerInfoProps {
   sellerName: string;
-  rating: number;
-  joinDate: string;
 }
 
-export const SellerInfo: React.FC<SellerInfoProps> = ({ sellerName, rating, joinDate }) => {
+export const SellerInfo: React.FC<SellerInfoProps> = ({ sellerName }) => {
   return (
     <div>
       <h2 className="font-medium text-lg mb-2">Vendedor</h2>
@@ -18,11 +16,6 @@ export const SellerInfo: React.FC<SellerInfoProps> = ({ sellerName, rating, join
         <div>
           <p className="font-medium">{sellerName}</p>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <span>⭐ {rating}</span>
-            <span className="flex items-center">
-              <Calendar className="h-3 w-3 mr-1" />
-              {joinDate}
-            </span>
           </div>
         </div>
       </div>
