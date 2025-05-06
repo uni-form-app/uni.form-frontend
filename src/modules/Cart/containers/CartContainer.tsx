@@ -7,6 +7,8 @@ import { RadioGroup, RadioGroupItem } from "../../../components/ui/radio-group";
 import { Label } from "../../../components/ui/label";
 import { Separator } from "../../../components/ui/separator";
 import { useCart } from '../../../hooks/useCart';
+import { usePartners } from "../queries/queries";
+import { useLocation } from "../../../hooks/useLocation";
 
 type CartItem = {
   id: string;
@@ -15,40 +17,36 @@ type CartItem = {
   ProductImages: { path: string }[];
 };
 
-type PickupPoint = {
-  id: number;
-  nome: string;
-  endereco: string;
-};
-
 export const CartContainer = () => {
-  const { cart, removeFromCart } = useCart() as { cart: CartItem[]; removeFromCart: (id: string) => void };
-  const [selectedPontoId, setSelectedPontoId] = useState<string>("1");
+  const { cart, removeFromCart } = useCart()
+  const [selectedPickupPointId, setSelectedPickupPointId] = useState<string>("1");
   const [isLoading, setIsLoading] = useState(false);
 
-  const pickupPoints: PickupPoint[] = [
-    { id: 1, nome: "Escola Municipal Central", endereco: "Rua das Flores, 123" },
-    { id: 2, nome: "Papelaria do Bairro", endereco: "Av. Principal, 456" },
-    { id: 3, nome: "Livraria Educativa", endereco: "Rua dos Livros, 789" },
-  ];
   const subtotal = cart.reduce((acc, item) => acc + Number(item.price), 0);
   const serviceTax = subtotal * 0.05;
   const total = subtotal + serviceTax;
+
+  const { location } = useLocation();
+
+  const { data: partners = [] } = usePartners({
+    lat: location?.latitude,
+    lng: location?.longitude,
+    radius: 20
+  });
 
   const handleRemoveItem = (productId: string) => {
     removeFromCart(productId);
   };
 
-  const handlePontoRetiradaChange = (value: string) => {
-    setSelectedPontoId(value);
-    console.log("Ponto de retirada selecionado:", value);
+  const handlePickupPointChange = (value: string) => {
+    setSelectedPickupPointId(value);
   };
 
   const handleCheckout = () => {
     setIsLoading(true);
-    // Simula uma requisição
+    // Simulate a request
     setTimeout(() => {
-      alert("Compra finalizada!");
+      alert("Purchase completed!");
       setIsLoading(false);
     }, 2000);
   };
@@ -89,11 +87,10 @@ export const CartContainer = () => {
                         <div className="flex justify-between">
                           <div>
                             <h3 className="font-medium">
-                              <Link to={`/produtos/${item.id}`} className="hover:underline">
+                              <Link to={`/product/${item.id}`} className="hover:underline">
                                 {item.name}
                               </Link>
                             </h3>
-                            <p className="text-sm text-muted-foreground mt-1">Quantidade: 1</p>
                           </div>
                           <div className="text-right">
                             <div className="font-bold">R$ {item.price}</div>
@@ -122,19 +119,19 @@ export const CartContainer = () => {
                   Selecione um ponto de retirada para o seu pedido:
                 </p>
                 <RadioGroup
-                  value={selectedPontoId}
-                  onValueChange={handlePontoRetiradaChange}
+                  value={selectedPickupPointId}
+                  onValueChange={handlePickupPointChange}
                   className="space-y-3"
                 >
-                  {pickupPoints.map((ponto) => (
-                    <div key={ponto.id} className="flex items-start space-x-3 rounded-md border p-3">
-                      <RadioGroupItem value={ponto.id.toString()} id={`ponto-${ponto.id}`} className="mt-1" />
+                  {partners.map((partner) => (
+                    <div key={partner.id} className="flex items-center space-x-3 rounded-md border p-3">
+                      <RadioGroupItem value={partner.id.toString()} id={`ponto-${partner.id}`} className="mt-1" />
                       <div className="flex-1">
-                        <Label htmlFor={`ponto-${ponto.id}`} className="flex-1 cursor-pointer">
-                          <div className="font-medium">{ponto.nome}</div>
+                        <Label htmlFor={`ponto-${partner.id}`} className="flex-1 cursor-pointer">
+                          <div className="font-sm">{partner.name}</div>
                           <div className="text-sm text-muted-foreground flex items-center mt-1">
                             <MapPin className="h-3 w-3 mr-1" />
-                            {ponto.endereco}
+                            {partner.address} - {partner.distance}km
                           </div>
                         </Label>
                       </div>
