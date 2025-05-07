@@ -1,53 +1,74 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import { Link } from "react-router-dom";
 import { useCart } from '../../../hooks/useCart';
-import { usePartners } from "../queries/queries";
+import { useOrders, usePartners } from "../queries/queries";
 import { useLocation } from "../../../hooks/useLocation";
 import { CartItems } from "../components/CartItems";
 import { PickupPoints } from "../components/PickupPoints";
 import { OrderSummary } from "../components/OrderSummary";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from 'zod';
+
+type FormValues = {
+  productId: string;
+  pickupPointId: string;
+};
+
+const formSchema = z.object({
+  productId: z.string().min(1, { message: "Produto é obrigatório" }),
+  pickupPointId: z.string().min(1, { message: "Ponto de retirada é obrigatório" }),
+});
 
 export const CartContainer = () => {
   const { cart, removeFromCart } = useCart();
-  const [selectedPickupPointId, setSelectedPickupPointId] = useState<string>("1");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const subtotal = cart.reduce((acc, item) => acc + Number(item.price), 0);
+  const {
+    handleSubmit,
+    control,
+    setValue,
+  } = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+  });
+
+  useEffect(() => {
+    if (cart) {
+      setValue("productId", cart.id);
+    }
+  }, [cart, setValue]);
+
+  const subtotal = cart ? Number(cart.price) : 0;
   const serviceTax = subtotal * 0.05;
   const total = subtotal + serviceTax;
 
   const { location } = useLocation();
-
-  const { data: partners = [] } = usePartners({
+  const { data: partners = [], isLoading } = usePartners({
     lat: location?.latitude,
     lng: location?.longitude,
-    radius: 20
+    radius: 20,
   });
+
+  const { mutate: create } = useOrders()
 
   const handleRemoveItem = (productId: string) => {
     removeFromCart(productId);
+    setValue("productId", "");
   };
 
-  const handlePickupPointChange = (value: string) => {
-    setSelectedPickupPointId(value);
-  };
-
-  const handleCheckout = () => {
-    setIsLoading(true);
-    // Simulate a request
-    setTimeout(() => {
-      alert("Purchase completed!");
-      setIsLoading(false);
-    }, 2000);
-  };
+  const handleCheckout = (data: any) => {
+    create({
+      partnerId: data.pickupPointId,
+      ...data,
+    })
+  }
 
   return (
     <div className="container py-8">
       <h1 className="text-2xl font-bold mb-8">Carrinho de compras</h1>
 
-      {cart.length === 0 ? (
+      {!cart ? (
         <div className="text-center py-12">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-muted mb-4">
             <ShoppingBag className="h-6 w-6 text-muted-foreground" />
@@ -59,13 +80,13 @@ export const CartContainer = () => {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <form onSubmit={handleCheckout} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <CartItems cart={cart} onRemoveItem={handleRemoveItem} />
             <PickupPoints
               partners={partners}
-              selectedPickupPointId={selectedPickupPointId}
-              onPickupPointChange={handlePickupPointChange}
+              control={control}
+              name="pickupPointId"
             />
           </div>
 
@@ -75,10 +96,10 @@ export const CartContainer = () => {
               serviceTax={serviceTax}
               total={total}
               isLoading={isLoading}
-              onCheckout={handleCheckout}
+              onCheckout={handleSubmit(handleCheckout)}
             />
           </div>
-        </div>
+        </form>
       )}
     </div>
   );
