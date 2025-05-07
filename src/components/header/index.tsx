@@ -12,7 +12,7 @@ export const Header = () => {
 
   const navigation = [
     { name: "Início", href: "/", icon: Home },
-    { name: "Meus Pedidos", href: "/purchases", icon: Package },
+    { name: "Meus Pedidos", href: "/orders", icon: Package },
     { name: "Anunciar", href: "/produtos/novo", icon: Plus },
   ]
 

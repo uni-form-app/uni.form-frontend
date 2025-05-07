@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { PendingOrders } from "../components/PendingOrders";
 import { DeliveredOrders } from "../components/DeliveredOrders";
 
-export const PurchasesContainer = () => {
+export const OrdersContainer = () => {
   const pedidos = [
     {
       id: 1,

@@ -6,7 +6,7 @@ import { LoginContainer } from "./modules/Login/containers/login";
 import { ProductContainer } from "./modules/Products/containers/ProductContainer";
 import { useLocalStorage } from "./providers/local-storage";
 import { ProductDetailContainer } from "./modules/Products/containers/ProductDetailContainer";
-import { PurchasesContainer } from "./modules/Purchases/containers/PurchasesContainer";
+import { OrdersContainer } from "./modules/Orders/containers/PurchasesContainer";
 import { CartContainer } from "./modules/Cart/containers/CartContainer";
 
 interface JwtPayload {
@@ -38,7 +38,7 @@ const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
 const routes = [
   { path: "/login", element: <LoginContainer /> },
   { path: "/", element: <ProtectedRoute element={<ProductContainer />} /> },
-  { path: "/purchases", element: <ProtectedRoute element={<PurchasesContainer />} /> },
+  { path: "/orders", element: <ProtectedRoute element={<OrdersContainer />} /> },
   { path: "/product/:id", element: <ProtectedRoute element={<ProductDetailContainer />} /> },
   { path: "/cart", element: <ProtectedRoute element={<CartContainer />} /> }
 ];
