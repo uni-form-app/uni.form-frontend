@@ -2,8 +2,7 @@ import { AlertCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs";
 import { Button } from "../../../components/ui/button";
 import { Link } from "react-router-dom";
-import { PendingOrders } from "../components/PendingOrders";
-import { DeliveredOrders } from "../components/DeliveredOrders";
+import { OrderList } from "../components/OrderList";
 
 export const OrdersContainer = () => {
   const pedidos = [
@@ -66,11 +65,11 @@ export const OrdersContainer = () => {
           </TabsList>
 
           <TabsContent value="pendentes">
-            <PendingOrders pedidosPendentes={pedidosPendentes} />
+            <OrderList pedidos={pedidosPendentes} status="pendente" />
           </TabsContent>
 
           <TabsContent value="entregues">
-            <DeliveredOrders pedidosEntregues={pedidosEntregues} />
+            <OrderList pedidos={pedidosEntregues} status="entregue" />
           </TabsContent>
         </Tabs>
       )}

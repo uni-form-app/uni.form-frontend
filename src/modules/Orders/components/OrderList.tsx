@@ -1,13 +1,13 @@
 import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { Card, CardContent } from "../../../components/ui/card";
-import { Clock, MapPin } from "lucide-react";
+import { CheckCircle2, Clock, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export const PendingOrders = ({ pedidosPendentes }: { pedidosPendentes: any[] }) => {
+export const OrderList = ({ pedidos, status }: { pedidos: any[]; status: string }) => {
   return (
     <div className="space-y-4">
-      {pedidosPendentes.map((pedido) => (
+      {pedidos.map((pedido) => (
         <Card key={pedido.id} className="overflow-hidden">
           <CardContent className="p-6">
             <div className="flex flex-col sm:flex-row gap-4">
@@ -21,9 +21,13 @@ export const PendingOrders = ({ pedidosPendentes }: { pedidosPendentes: any[] })
               <div className="flex-1">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                   <div>
-                    <Badge className="mb-2">
-                      <Clock className="mr-1 h-3 w-3" />
-                      Pendente
+                    <Badge className={`mb-2 ${status === "entregue" ? "bg-green-500 hover:bg-green-600" : ""}`}>
+                      {status === "entregue" ? (
+                        <CheckCircle2 className="mr-1 h-3 w-3" />
+                      ) : (
+                        <Clock className="mr-1 h-3 w-3" />
+                      )}
+                      {status === "entregue" ? "Entregue" : "Pendente"}
                     </Badge>
                     <h3 className="font-medium">
                       <Link to={`/produtos/${pedido.produto.id}`} className="hover:underline">
@@ -32,7 +36,11 @@ export const PendingOrders = ({ pedidosPendentes }: { pedidosPendentes: any[] })
                     </h3>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm text-muted-foreground">Pedido em {pedido.dataPedido}</div>
+                    {status === "entregue" ? (
+                      <div className="text-sm text-muted-foreground">Entregue em {pedido.dataEntrega}</div>
+                    ) : (
+                      <div className="text-sm text-muted-foreground">Pedido em {pedido.dataPedido}</div>
+                    )}
                     <div className="font-bold">R$ {pedido.produto.preco.toFixed(2).replace(".", ",")}</div>
                   </div>
                 </div>
@@ -44,9 +52,9 @@ export const PendingOrders = ({ pedidosPendentes }: { pedidosPendentes: any[] })
                       <p>{pedido.pontoRetirada.endereco}</p>
                     </div>
                   </div>
-                  <Button className="sm:self-end">
-                    Confirmar recebimento
-                  </Button>
+                  {status === "pendente" && (
+                    <Button className="sm:self-end">Confirmar recebimento</Button>
+                  )}
                 </div>
               </div>
             </div>
