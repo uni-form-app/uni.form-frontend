@@ -22,16 +22,7 @@ export const useCart = () => {
   }, []);
 
   const addToCart = (product: Product) => {
-    const existingItemIndex = cart.findIndex((item) => item.id === product.id);
-
-    if (existingItemIndex >= 0) {
-      const updatedCart = [...cart];
-      updatedCart[existingItemIndex] = { ...updatedCart[existingItemIndex], ...product };
-      saveCart(updatedCart);
-    } else {
-      const updatedCart = [...cart, product];
-      saveCart(updatedCart);
-    }
+    saveCart([product]);
   };
 
   const removeFromCart = (productId: string) => {
