@@ -38,10 +38,8 @@ export const useCart = () => {
     saveCart(product);
   };
 
-  const removeFromCart = (productId: string) => {
-    if (cart?.id === productId) {
-      saveCart(null);
-    }
+  const removeFromCart = () => {
+    saveCart(null);
   };
 
   const total = cart ? 1 : 0;

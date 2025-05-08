@@ -44,6 +44,7 @@ export const CartContainer = () => {
   const total = subtotal + serviceTax;
   const mavigate = useNavigate()
 
+
   const { location } = useLocation();
   const { data: partners = [], isLoading } = usePartners({
     lat: location?.latitude,
@@ -53,8 +54,8 @@ export const CartContainer = () => {
 
   const { mutate: create } = useOrders()
 
-  const handleRemoveItem = (productId: string) => {
-    removeFromCart(productId);
+  const handleRemoveItem = () => {
+    removeFromCart();
     setValue("productId", "");
   };
 
@@ -63,6 +64,8 @@ export const CartContainer = () => {
       partnerId: data.pickupPointId,
       ...data,
     })
+
+    handleRemoveItem()
 
     mavigate('/orders')
   }
