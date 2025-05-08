@@ -5,14 +5,24 @@ import { Clock, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Order } from "../services";
 import { usePayment } from "../queries/queries";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../components/ui/dialog";
+import { useState } from "react";
 
 export const PendingOrders = ({ orders }: { orders: Order[] }) => {
+  const [isProcessing, setIsProcessing] = useState(false)
+
   const { mutate: pay } = usePayment()
 
   const handlePayment = (orderId: string) => {
-    pay({ orderId })
+    pay(
+      { orderId },
+      {
+        onSuccess: () => setIsProcessing(true),
+        onError: () => {
+        },
+      }
+    );
   }
-
   return (
     <div className="space-y-4">
       {orders.map((order, i) => (
@@ -61,6 +71,26 @@ export const PendingOrders = ({ orders }: { orders: Order[] }) => {
           </CardContent>
         </Card>
       ))}
+
+      <Dialog open={isProcessing} onOpenChange={setIsProcessing}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Processando pagamento</DialogTitle>
+          </DialogHeader>
+          <div>
+            <div className="flex gap-4">
+              <p className="text-center text-sm text-muted-foreground">
+                Estamos processando seu pagamento.
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <Button variant="default" onClick={() => setIsProcessing(false)}>
+              Fechar
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
