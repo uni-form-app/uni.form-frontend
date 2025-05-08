@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "../../../components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from '../../../hooks/useCart';
 import { useOrders, usePartners } from "../queries/queries";
 import { useLocation } from "../../../hooks/useLocation";
@@ -42,6 +42,7 @@ export const CartContainer = () => {
   const subtotal = cart ? Number(cart.price) : 0;
   const serviceTax = subtotal * 0.05;
   const total = subtotal + serviceTax;
+  const mavigate = useNavigate()
 
   const { location } = useLocation();
   const { data: partners = [], isLoading } = usePartners({
@@ -62,6 +63,8 @@ export const CartContainer = () => {
       partnerId: data.pickupPointId,
       ...data,
     })
+
+    mavigate('/orders')
   }
 
   return (

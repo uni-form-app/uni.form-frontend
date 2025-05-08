@@ -22,7 +22,7 @@ export const OrdersList = ({ orders }: { orders: Order[] }) => {
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="relative w-20 h-20 rounded overflow-hidden shrink-0">
                 <img
-                  src={"/placeholder.svg"}
+                  src={`http://localhost:8080/public/${order.product.ProductImages[0].path || ""}`}
                   alt={order.product.name}
                   className="object-cover"
                 />

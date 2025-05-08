@@ -10,7 +10,7 @@ export interface Order {
     id: string;
     name: string;
     price: string;
-    productImage: ProductImage[]
+    ProductImages: ProductImage[]
   };
   partner: {
     id: string;
