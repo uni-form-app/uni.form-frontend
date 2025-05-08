@@ -23,7 +23,7 @@ export const ProductContainer = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg">
-                <Link to="/produtos/novo">Anunciar uniforme</Link>
+                <Link to="/product/new">Anunciar uniforme</Link>
               </Button>
             </div>
           </div>

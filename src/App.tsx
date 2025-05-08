@@ -8,6 +8,7 @@ import { useLocalStorage } from "./providers/local-storage";
 import { ProductDetailContainer } from "./modules/Products/containers/ProductDetailContainer";
 import { CartContainer } from "./modules/Cart/containers/CartContainer";
 import { OrdersContainer } from "./modules/Orders/containers/PurchasesContainer";
+import { CreateProductContainer } from "./modules/Products/containers/CreateProductContainer";
 
 interface JwtPayload {
   exp: number;
@@ -40,7 +41,8 @@ const routes = [
   { path: "/", element: <ProtectedRoute element={<ProductContainer />} /> },
   { path: "/orders", element: <ProtectedRoute element={<OrdersContainer />} /> },
   { path: "/product/:id", element: <ProtectedRoute element={<ProductDetailContainer />} /> },
-  { path: "/cart", element: <ProtectedRoute element={<CartContainer />} /> }
+  { path: "/cart", element: <ProtectedRoute element={<CartContainer />} /> },
+  { path: "/product/new", element: <ProtectedRoute element={<CreateProductContainer />} /> }
 ];
 
 const AppContent = () => {

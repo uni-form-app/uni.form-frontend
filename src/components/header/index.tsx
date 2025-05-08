@@ -13,7 +13,7 @@ export const Header = () => {
   const navigation = [
     { name: "Início", href: "/", icon: Home },
     { name: "Meus Pedidos", href: "/orders", icon: Package },
-    { name: "Anunciar", href: "/produtos/novo", icon: Plus },
+    { name: "Anunciar", href: "/product/new", icon: Plus },
   ]
 
   const { user, logout } = useAuth();
@@ -101,9 +101,9 @@ export const Header = () => {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to="/produtos/meus" className="cursor-pointer flex items-center">
+              <Link to="/orders" className="cursor-pointer flex items-center">
                 <Package className="mr-2 h-4 w-4" />
-                <span>Meus Anúncios</span>
+                <span>Meus Pedidos</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
