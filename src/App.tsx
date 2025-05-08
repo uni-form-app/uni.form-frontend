@@ -6,8 +6,8 @@ import { LoginContainer } from "./modules/Login/containers/login";
 import { ProductContainer } from "./modules/Products/containers/ProductContainer";
 import { useLocalStorage } from "./providers/local-storage";
 import { ProductDetailContainer } from "./modules/Products/containers/ProductDetailContainer";
-import { OrdersContainer } from "./modules/Orders/containers/PurchasesContainer";
 import { CartContainer } from "./modules/Cart/containers/CartContainer";
+import { OrdersContainer } from "./modules/Orders/containers/PurchasesContainer";
 
 interface JwtPayload {
   exp: number;

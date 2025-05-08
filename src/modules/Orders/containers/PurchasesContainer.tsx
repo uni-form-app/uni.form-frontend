@@ -2,51 +2,26 @@ import { AlertCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs";
 import { Button } from "../../../components/ui/button";
 import { Link } from "react-router-dom";
-import { OrderList } from "../components/OrderList";
+import { PendingOrders } from "../components/PendingOrders";
+import { useOrders } from "../queries/queries";
+import { OrdersList } from "../components/Orders";
 
 export const OrdersContainer = () => {
-  const pedidos = [
-    {
-      id: 1,
-      produto: {
-        id: 1,
-        nome: "Camiseta Escolar Azul",
-        preco: 35.9,
-        imagem: "/placeholder.svg?height=100&width=100",
-      },
-      status: "pendente",
-      dataPedido: "15/04/2023",
-      pontoRetirada: {
-        nome: "Escola Municipal Central",
-        endereco: "Rua das Flores, 123",
-      },
-    },
-    {
-      id: 2,
-      produto: {
-        id: 2,
-        nome: "Calça Uniforme Cinza",
-        preco: 45.5,
-        imagem: "/placeholder.svg?height=100&width=100",
-      },
-      status: "entregue",
-      dataPedido: "10/03/2023",
-      dataEntrega: "15/03/2023",
-      pontoRetirada: {
-        nome: "Papelaria do Bairro",
-        endereco: "Av. Principal, 456",
-      },
-    },
-  ];
+  const { data: pendingOrders = [] } = useOrders({
+    status: ['pending']
+  });
 
-  const pedidosPendentes = pedidos.filter((pedido) => pedido.status === "pendente");
-  const pedidosEntregues = pedidos.filter((pedido) => pedido.status === "entregue");
+  const { data: Orders = [] } = useOrders({
+    status: ['delivered', "cancelled", "on_delivery", "payment_confirmed"]
+  });
+
+  const hasNoOrders = pendingOrders.length === 0 && Orders.length === 0;
 
   return (
     <div className="container py-8">
       <h1 className="text-2xl font-bold mb-8">Meus pedidos</h1>
 
-      {pedidos.length === 0 ? (
+      {hasNoOrders ? (
         <div className="text-center py-12">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-muted mb-4">
             <AlertCircle className="h-6 w-6 text-muted-foreground" />
@@ -60,16 +35,16 @@ export const OrdersContainer = () => {
       ) : (
         <Tabs defaultValue="pendentes" className="w-full">
           <TabsList className="mb-6">
-            <TabsTrigger value="pendentes">Pendentes ({pedidosPendentes.length})</TabsTrigger>
-            <TabsTrigger value="entregues">Entregues ({pedidosEntregues.length})</TabsTrigger>
+            <TabsTrigger value="pendentes">Pendentes ({pendingOrders.length})</TabsTrigger>
+            <TabsTrigger value="others">outros ({Orders.length})</TabsTrigger>
           </TabsList>
 
           <TabsContent value="pendentes">
-            <OrderList pedidos={pedidosPendentes} status="pendente" />
+            <PendingOrders orders={pendingOrders} />
           </TabsContent>
 
-          <TabsContent value="entregues">
-            <OrderList pedidos={pedidosEntregues} status="entregue" />
+          <TabsContent value="others">
+            <OrdersList orders={Orders} />
           </TabsContent>
         </Tabs>
       )}
