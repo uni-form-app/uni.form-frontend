@@ -12,7 +12,7 @@ export function ProductCard({ product }: ProductCardProps) {
     <Link to={`/product/${product.id}`} key={product.id}>
       <Card className="h-full overflow-hidden hover:shadow-md transition-shadow pt-0 rounded-sm">
         <div className="aspect-square relative">
-          <img src={imageUrl} alt={product.name} className="object-cover" />
+          <img src={imageUrl} alt={product.name} className="object-cover w-full h-[250px]" />
         </div>
         <CardContent>
           <h3 className="font-medium text-lg line-clamp-1">{product.name}</h3>
