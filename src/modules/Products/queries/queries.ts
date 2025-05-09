@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import * as service from '../services';
 import { Product } from '../components/models';
 
@@ -21,3 +21,9 @@ export const useProduct = (id: string) => {
     queryFn: () => service.product(id),
   });
 }
+
+export const useUploadProduct = () => {
+  return useMutation<Product, Error, Parameters<typeof service.uploadProduct>[0]>({
+    mutationFn: service.uploadProduct,
+  });
+};

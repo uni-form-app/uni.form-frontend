@@ -15,44 +15,60 @@ import { Label } from "../../../../components/ui/label"
 import { Input } from "../../../../components/ui/input"
 import { Textarea } from "../../../../components/ui/textarea"
 import { Upload, X } from "lucide-react"
+import { useUploadProduct } from "../../queries/queries"
 
 const formSchema = z.object({
   nome: z.string().min(1, "O nome é obrigatório"),
   preco: z.coerce.number().min(0, "O preço deve ser positivo"),
   descricao: z.string().min(1, "A descrição é obrigatória"),
-  imagens: z.any().optional(), // você pode ajustar isso para validar melhor os arquivos
+  imagem: z
+    .instanceof(File, { message: "A imagem é obrigatória" })
+    .refine((file) => file.size > 0, {
+      message: "A imagem não pode estar vazia",
+    }).optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>
 
 export const CreateProductContainer = () => {
-  const [imagem, setImagem] = useState<string | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
 
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
+    reset,
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
   })
 
+  const { mutate: uploadProduct, isPending } = useUploadProduct()
+
   const onSubmit = (data: FormValues) => {
-    console.log("Formulário enviado:", data)
-    console.log("Imagem:", imagem)
-    // integração com backend
+    uploadProduct({
+      name: data.nome,
+      price: data.preco,
+      description: data.descricao,
+      size: "M", // substitua conforme necessário
+      school: "Escola Teste", // substitua conforme necessário
+      image: data.imagem!,
+    }, {
+      onSuccess: () => reset()
+    })
   }
 
-  const handleImagemUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImagemPreview = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      const url = URL.createObjectURL(file)
-      setImagem(url)
+      setPreview(URL.createObjectURL(file))
+      setValue("imagem", file, { shouldValidate: true })
     }
   }
 
   const removerImagem = () => {
-    setImagem(null)
+    setPreview(null)
+    setValue("imagem", undefined, { shouldValidate: true })
   }
 
   return (
@@ -100,9 +116,9 @@ export const CreateProductContainer = () => {
             <div className="space-y-2">
               <Label>Imagem do produto</Label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {imagem && (
+                {preview && (
                   <div className="relative aspect-square rounded-md overflow-hidden border">
-                    <img src={imagem} alt="Imagem do produto" className="w-full h-full object-cover" />
+                    <img src={preview} alt="Preview da imagem" className="w-full h-full object-cover" />
                     <Button
                       type="button"
                       variant="destructive"
@@ -115,7 +131,7 @@ export const CreateProductContainer = () => {
                   </div>
                 )}
 
-                {!imagem && (
+                {!preview && (
                   <label className="flex flex-col items-center justify-center border border-dashed rounded-md aspect-square cursor-pointer hover:bg-muted/50 transition-colors">
                     <div className="flex flex-col items-center justify-center p-4">
                       <Upload className="h-8 w-8 mb-2 text-muted-foreground" />
@@ -125,11 +141,12 @@ export const CreateProductContainer = () => {
                       type="file"
                       accept="image/*"
                       className="hidden"
-                      onChange={handleImagemUpload}
+                      onChange={handleImagemPreview}
                     />
                   </label>
                 )}
               </div>
+              {errors.imagem && <p className="text-sm text-red-500">{errors.imagem.message}</p>}
               <p className="text-xs text-muted-foreground">
                 Adicione uma imagem do produto.
               </p>
@@ -140,7 +157,9 @@ export const CreateProductContainer = () => {
             <Button type="button" variant="outline">
               Cancelar
             </Button>
-            <Button type="submit">Publicar anúncio</Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Publicando..." : "Publicar anúncio"}
+            </Button>
           </CardFooter>
         </form>
       </Card>
