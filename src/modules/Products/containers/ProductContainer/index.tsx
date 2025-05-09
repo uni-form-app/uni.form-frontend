@@ -5,18 +5,11 @@ import type React from "react"
 import { Link } from "react-router-dom"
 import { Button } from "../../../../components/ui/button"
 import { useProducts } from "../../queries/queries"
-import { Search, ArrowUpDown } from "lucide-react"
+import { Search } from "lucide-react"
 import { Input } from "../../../../components/ui/input"
 import { ProductCard } from "../../components/product"
 import { useState } from "react"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../../../components/ui/dropdown-menu"
+import { FilterMenu } from "../../components/FilterMenu"
 
 export const ProductContainer = () => {
   const [search, setSearch] = useState<string | undefined>(undefined)
@@ -28,10 +21,6 @@ export const ProductContainer = () => {
     order: sortOrder,
     search,
   })
-
-  // useEffect(() => {
-  //   refetch()
-  // }, [search, sortOrder, sortBy])
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value || undefined)
@@ -73,40 +62,12 @@ export const ProductContainer = () => {
                 />
               </div>
 
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon" className="h-9 w-9">
-                    <ArrowUpDown className="h-4 w-4" />
-                    <span className="sr-only">Ordenar</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>Ordenar por</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    className={sortBy === "price" ? "font-medium" : ""}
-                    onClick={() => setSortBy("price")}
-                  >
-                    Preço {sortBy === "price" && (sortOrder === "asc" ? "(menor para maior)" : "(maior para menor)")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className={sortBy === "name" ? "font-medium" : ""}
-                    onClick={() => setSortBy("name")}
-                  >
-                    Nome {sortBy === "name" && (sortOrder === "asc" ? "(A-Z)" : "(Z-A)")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className={sortBy === "createdAt" ? "font-medium" : ""}
-                    onClick={() => setSortBy("createdAt")}
-                  >
-                    Data {sortBy === "createdAt" && (sortOrder === "asc" ? "(mais antigos)" : "(mais recentes)")}
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={toggleSortOrder}>
-                    Ordem: {sortOrder === "asc" ? "Crescente ↑" : "Decrescente ↓"}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <FilterMenu
+                sortBy={sortBy}
+                sortOrder={sortOrder}
+                onSortByChange={setSortBy}
+                onSortOrderToggle={toggleSortOrder}
+              />
             </div>
           </div>
 
