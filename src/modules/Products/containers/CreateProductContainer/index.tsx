@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -30,8 +30,38 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
+const ImagePreview = ({ preview, onRemove, onFileChange }: { preview: string | null; onRemove: () => void; onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void }) => (
+  preview ? (
+    <div className="relative aspect-square rounded-md overflow-hidden border">
+      <img src={preview} alt="Preview da imagem" className="w-full h-full object-cover" />
+      <Button
+        type="button"
+        variant="destructive"
+        size="icon"
+        className="absolute top-1 right-1 h-6 w-6"
+        onClick={onRemove}
+      >
+        <X className="h-4 w-4" />
+      </Button>
+    </div>
+  ) : (
+    <label className="flex flex-col items-center justify-center border border-dashed rounded-md aspect-square cursor-pointer hover:bg-muted/50 transition-colors">
+      <div className="flex flex-col items-center justify-center p-4">
+        <Upload className="h-8 w-8 mb-2 text-muted-foreground" />
+        <span className="text-sm text-muted-foreground text-center">Clique para adicionar</span>
+      </div>
+      <Input
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={onFileChange}
+      />
+    </label>
+  )
+);
+
 export const CreateProductContainer = () => {
-  const [preview, setPreview] = useState<string | null>(null)
+  const [preview, setPreview] = useState<string | null>(null);
 
   const {
     register,
@@ -41,35 +71,45 @@ export const CreateProductContainer = () => {
     reset,
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-  })
+  });
 
-  const { mutate: uploadProduct, isPending } = useUploadProduct()
+  const { mutate: uploadProduct, isPending } = useUploadProduct();
 
-  const onSubmit = (data: FormValues) => {
-    uploadProduct({
-      name: data.nome,
-      price: data.preco,
-      description: data.descricao,
-      size: "M", // substitua conforme necessário
-      school: "Escola Teste", // substitua conforme necessário
-      image: data.imagem!,
-    }, {
-      onSuccess: () => reset()
-    })
-  }
+  const onSubmit = useCallback((data: FormValues) => {
+    uploadProduct(
+      {
+        name: data.nome,
+        price: data.preco,
+        description: data.descricao,
+        size: "M", // substitua conforme necessário
+        school: "Escola Teste", // substitua conforme necessário
+        image: data.imagem!,
+      },
+      {
+        onSuccess: () => reset(),
+      }
+    );
+  }, [uploadProduct, reset]);
 
-  const handleImagemPreview = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+  const handleImagemPreview = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
-      setPreview(URL.createObjectURL(file))
-      setValue("imagem", file, { shouldValidate: true })
+      setPreview(URL.createObjectURL(file));
+      setValue("imagem", file, { shouldValidate: true });
     }
-  }
+  }, [setValue]);
 
-  const removerImagem = () => {
-    setPreview(null)
-    setValue("imagem", undefined, { shouldValidate: true })
-  }
+  const removerImagem = useCallback(() => {
+    if (preview) URL.revokeObjectURL(preview);
+    setPreview(null);
+    setValue("imagem", undefined, { shouldValidate: true });
+  }, [preview, setValue]);
+
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
 
   return (
     <div className="container py-8">
@@ -116,35 +156,7 @@ export const CreateProductContainer = () => {
             <div className="space-y-2">
               <Label>Imagem do produto</Label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {preview && (
-                  <div className="relative aspect-square rounded-md overflow-hidden border">
-                    <img src={preview} alt="Preview da imagem" className="w-full h-full object-cover" />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="icon"
-                      className="absolute top-1 right-1 h-6 w-6"
-                      onClick={removerImagem}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                )}
-
-                {!preview && (
-                  <label className="flex flex-col items-center justify-center border border-dashed rounded-md aspect-square cursor-pointer hover:bg-muted/50 transition-colors">
-                    <div className="flex flex-col items-center justify-center p-4">
-                      <Upload className="h-8 w-8 mb-2 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground text-center">Clique para adicionar</span>
-                    </div>
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleImagemPreview}
-                    />
-                  </label>
-                )}
+                <ImagePreview preview={preview} onRemove={removerImagem} onFileChange={handleImagemPreview} />
               </div>
               {errors.imagem && <p className="text-sm text-red-500">{errors.imagem.message}</p>}
               <p className="text-xs text-muted-foreground">
@@ -154,7 +166,7 @@ export const CreateProductContainer = () => {
           </CardContent>
 
           <CardFooter className="flex justify-between">
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" onClick={() => reset()}>
               Cancelar
             </Button>
             <Button type="submit" disabled={isPending}>
@@ -164,5 +176,5 @@ export const CreateProductContainer = () => {
         </form>
       </Card>
     </div>
-  )
-}
+  );
+};
