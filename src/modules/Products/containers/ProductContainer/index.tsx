@@ -1,16 +1,45 @@
-// containers/ProductContainer.tsx
-import { Link } from "react-router-dom";
-import { Button } from "../../../../components/ui/button";
-import { useProducts } from "../../queries/queries";
-import { Filter, Search } from "lucide-react";
-import { Input } from "../../../../components/ui/input";
-import { ProductCard } from "../../components/product";
+"use client"
+
+import type React from "react"
+
+import { Link } from "react-router-dom"
+import { Button } from "../../../../components/ui/button"
+import { useProducts } from "../../queries/queries"
+import { Search, ArrowUpDown } from "lucide-react"
+import { Input } from "../../../../components/ui/input"
+import { ProductCard } from "../../components/product"
+import { useState } from "react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../../../components/ui/dropdown-menu"
 
 export const ProductContainer = () => {
+  const [search, setSearch] = useState<string | undefined>(undefined)
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
+  const [sortBy, setSortBy] = useState<'price' | 'createdAt' | 'name'>("price")
+
   const { data: products = [] } = useProducts({
-    sortBy: "price",
-    order: "asc",
-  });
+    sortBy,
+    order: sortOrder,
+    search,
+  })
+
+  // useEffect(() => {
+  //   refetch()
+  // }, [search, sortOrder, sortBy])
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value || undefined)
+  }
+
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+  }
 
   return (
     <>
@@ -35,12 +64,49 @@ export const ProductContainer = () => {
             <div className="flex w-full md:w-auto gap-2">
               <div className="relative flex-1 md:w-64">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input type="search" placeholder="Buscar uniformes..." className="pl-8" />
+                <Input
+                  type="search"
+                  placeholder="Buscar uniformes..."
+                  className="pl-8"
+                  value={search || ""}
+                  onChange={handleSearchChange}
+                />
               </div>
-              <Button variant="outline" size="icon">
-                <Filter className="h-4 w-4" />
-                <span className="sr-only">Filtrar</span>
-              </Button>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" className="h-9 w-9">
+                    <ArrowUpDown className="h-4 w-4" />
+                    <span className="sr-only">Ordenar</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>Ordenar por</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className={sortBy === "price" ? "font-medium" : ""}
+                    onClick={() => setSortBy("price")}
+                  >
+                    Preço {sortBy === "price" && (sortOrder === "asc" ? "(menor para maior)" : "(maior para menor)")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className={sortBy === "name" ? "font-medium" : ""}
+                    onClick={() => setSortBy("name")}
+                  >
+                    Nome {sortBy === "name" && (sortOrder === "asc" ? "(A-Z)" : "(Z-A)")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className={sortBy === "createdAt" ? "font-medium" : ""}
+                    onClick={() => setSortBy("createdAt")}
+                  >
+                    Data {sortBy === "createdAt" && (sortOrder === "asc" ? "(mais antigos)" : "(mais recentes)")}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={toggleSortOrder}>
+                    Ordem: {sortOrder === "asc" ? "Crescente ↑" : "Decrescente ↓"}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
 
@@ -87,5 +153,5 @@ export const ProductContainer = () => {
         </section>
       </div>
     </>
-  );
-};
+  )
+}
