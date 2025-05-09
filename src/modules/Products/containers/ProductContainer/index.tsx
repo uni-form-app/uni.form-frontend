@@ -19,7 +19,7 @@ export const ProductContainer = () => {
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-3xl font-bold mb-4">Uniformes escolares sustentáveis</h1>
             <p className="text-lg mb-6">
-              Compre, venda ou doe uniformes escolares usados. Economize dinheiro e ajude o meio ambiente.
+              Compre e venda uniformes escolares usados. Economize dinheiro e ajude o meio ambiente.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg">
